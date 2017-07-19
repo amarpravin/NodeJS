@@ -1,9 +1,10 @@
 var express = require('express');
+var data = require('./superhero.json')
 var app = express();
 
 app.get('/', function (req, res) {
     console.log("Got a GET request for the homepage");
-    res.send('Hello GET');
+    res.send(data);
 })
 
 app.post('/', function (req, res) {
@@ -16,10 +17,21 @@ app.delete('/del_user', function (req, res) {
     res.send('Hello DELETE');
 })
 
-app.get('/list_user', function (req, res) {
-    console.log("Got a GET request for /list_user");
-    res.send('Page Listing');
+app.get('/getSuperHeroList', function (req, res) {
+    console.log("Got a GET request for /getSuperHeroList");
+    res.send(data);
 })
+
+app.get('/searchSuperHero', function (req, res) {
+    filteredData = data.filter(function (o) {
+        if (o.name == undefined || req.query.name == undefined)
+            return;
+        return (o.name.toUpperCase() === req.query.name.toUpperCase());
+    });
+    console.log("Got a GET request for /searchSuperHero");
+    res.send(filteredData);
+})
+
 
 app.get('/ab*cd', function (req, res) {
     console.log("Got a GET request for /ab*cd");
